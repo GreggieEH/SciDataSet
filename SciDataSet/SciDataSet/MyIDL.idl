@@ -1,0 +1,249 @@
+// MyIDL.idl
+// IDL file for the Simple Com object
+
+#include "dispids.h"
+
+[
+	uuid(DAFBBD61-0D35-4a80-9D23-267A47327040),
+	helpstring(""),
+	version(1.0)
+]
+library SciDataSet
+{
+	importlib("stdole32.tlb");
+	[
+		uuid(E2DEA9B5-F6F0-440d-B728-D5A5EA15CB42),
+		helpstring("Interface")
+	]
+	dispinterface ISciDataSet
+	{
+	properties:
+		[id(DISPID_DataProgID)]
+		BSTR				DataProgID;
+		[id(DISPID_RadianceAvailable), readonly]
+		VARIANT_BOOL		RadianceAvailable;
+		[id(DISPID_IrradianceAvailable), readonly]
+		VARIANT_BOOL		IrradianceAvailable;
+		[id(DISPID_AnalysisMode)]
+		short int			AnalysisMode;
+		[id(DISPID_FileName)]
+		BSTR				FileName;
+		[id(DISPID_AmCalibration)]
+		VARIANT				AmCalibration;
+		[id(DISPID_RadianceWaves), readonly, helpstring("Wavelengths for the Radiance calculation")]
+		SAFEARRAY(double)	RadianceWaves;
+		[id(DISPID_Radiance), readonly, helpstring("Radiance calculation")]
+		SAFEARRAY(double)	Radiance;
+		[id(DISPID_HaveOPT), helpstring("Have OPT calculation")]
+		VARIANT_BOOL		HaveOPT;
+		[id(DISPID_OPTWaves), readonly, helpstring("OPT waves array")]
+		SAFEARRAY(double)	OPTWaves;
+		[id(DISPID_OPTValues), readonly, helpstring("OPT calculated signals")]
+		SAFEARRAY(double)	OPTValues;
+		[id(DISPID_ScanType), helpstring("Scan type string")]
+		BSTR				ScanType;
+		[id(DISPID_Comment), helpstring("Comment string")]
+		BSTR				Comment;
+		[id(DISPID_DefaultUnits), helpstring("Default units")]
+		BSTR				DefaultUnits;
+		[id(DISPID_DefaultTitle), helpstring("Default y title")]
+		BSTR				DefaultTitle;
+		[id(DISPID_CountsAvailable), helpstring("Counts Available")]
+		VARIANT_BOOL		CountsAvailable;
+		[id(DISPID_HaveCalibrationStandard), readonly]
+		VARIANT_BOOL		HaveCalibrationStandard;
+		[id(DISPID_ArrayScanning), helpstring("Array scanning flag")]
+		VARIANT_BOOL		ArrayScanning;
+		[id(DISPID_NumPeaks), readonly, helpstring("Number of peaks")]
+		long				NumPeaks;
+	methods:
+		[id(DISPID_ReadDataFile)]
+		VARIANT_BOOL		ReadDataFile();
+		[id(DISPID_WriteDataFile)]
+		VARIANT_BOOL		WriteDataFile();
+		[id(DISPID_GetWavelengths)]
+		SAFEARRAY(double)	GetWavelengths();
+		[id(DISPID_GetSpectra)]
+		SAFEARRAY(double)	GetSpectra();
+		[id(DISPID_AddValue)]
+		VARIANT_BOOL		AddValue(                      
+								[in, out]	double	*	NM, 
+								[in, out]	double	*	Signal);
+		[id(DISPID_ViewSetup)]
+		VARIANT_BOOL		ViewSetup(
+								 [in]		long		hwnd);
+		[id(DISPID_GetArraySize)]
+		long				GetArraySize();
+		[id(DISPID_SetCurrentExp)]
+		void				SetCurrentExp(
+								[in, out]	BSTR	*	filter,
+								[in, out]	short	*	grating,
+								[in, out]	short	*	detector);
+		[id(DISPID_calcRadiance)]
+		VARIANT_BOOL		calcRadiance(
+								[in, out]	VARIANT_BOOL* radiance); 
+		[id(DISPID_setObject)]
+		VARIANT_BOOL		setObject(
+								[in]		IDispatch*	pdisp);
+		[id(DISPID_GetCreateTime), helpstring("Return the creation time for this sample")]
+		BSTR				GetCreateTime();
+		[id(DISPID_FormOutFile), helpstring("Form output file")]
+		VARIANT_BOOL		FormOutFile(
+								[in]		BSTR				CalibrationFile,
+								[in]		BSTR				fileExtension,
+								[in, out]	SAFEARRAY(double)*	XValues,
+								[in, out]	SAFEARRAY(double)*	YValues);
+		[id(DISPID_GetDataValue), helpstring("Get a data value")]
+		double				GetDataValue(
+								[in, out]	double	*	xValue);
+		[id(DISPID_SetDataValue), helpstring("Set a data value")]
+		void				SetDataValue(
+								[in, out]	double	*	xValue,
+								[in, out]	double	*	yValue);
+		[id(DISPID_LoadFromString), helpstring("Load from input string")]
+		VARIANT_BOOL		LoadFromString(
+								[in]		BSTR		str);
+		[id(DISPID_FormOpticalTransferFile), helpstring("create an optical transfer file")]
+		VARIANT_BOOL	FormOpticalTransferFile(
+								[in]		BSTR		filePath);
+//		[id(DISPID_SetCalibrationWavelengths)]
+//		void			SetCalibrationWavelengths(
+//							[in, out]		SAFEARRAY(double)*	Wavelengths);
+		[id(DISPID_SetCalibrationData)]
+		VARIANT_BOOL	SetCalibrationData(
+							[in, out]		SAFEARRAY(double)*	Wavelengths,
+							[in, out]		SAFEARRAY(double)*	Signals);
+		[id(DISPID_FileNameFromPath), helpstring("Given the file path, return file name without extension")]
+		BSTR			FileNameFromPath(
+							[in]			BSTR		FilePath);
+		[id(DISPID_NewObjectSetup), helpstring("Setup for new object")]
+		VARIANT_BOOL	NewObjectSetup(
+							[in]			long		hwndParent);
+		[id(DISPID_SelectCalibrationStandard), helpstring("Select the calibration standard")]
+		VARIANT_BOOL	SelectCalibrationStandard(
+							[in]			long		hwndParent);
+		[id(DISPID_ExtraScanData), helpstring("Extra scan data")]
+		void			ExtraScanData(
+							[in]			BSTR		title,
+							[in]			double		wavelength,
+							[in]			double		extraValue);
+		[id(DISPID_GetGratingScan), helpstring("Single calibration scan")]
+		VARIANT			GetGratingScan(
+							[in]			short		Grating,
+							[in]			BSTR		filter,
+							[in]			short		detector,
+							[in, out]		SAFEARRAY(double)* Waves,
+							[in, out]		SAFEARRAY(double)* Signals);
+		[id(DISPID_ExportToCSV), helpstring("Export to CSV file")]
+		VARIANT_BOOL	ExportToCSV(
+							[in]			BSTR		csvFile);
+		[id(DISPID_GetADGainFactor), helpstring("Get AD gain factors")]
+		double			GetADGainFactor(
+							[in]			double		wavelength);
+		[id(DISPID_SetArrayData), helpstring("Set array data")]
+		VARIANT_BOOL	SetArrayData(
+							[in, out]		SAFEARRAY(double)*	Wavelengths,
+							[in, out]		SAFEARRAY(double)*	Signals);
+		[id(DISPID_InitTempData), helpstring("Initialize temporary data")]
+		VARIANT_BOOL	InitTempData(
+							[in]			BSTR		workingDirectory);
+		[id(DISPID_FindPeaks), helpstring("Determine peaks depending on peak threshold")]
+		VARIANT_BOOL	FindPeaks(
+							[in]		double		peakThreshold);
+		[id(DISPID_DisplayPeaks), helpstring("Display the peaks")]
+		void			DisplayPeaks(
+							[in]		long		hwndParent);
+		[id(DISPID_PeakPosition), propget, helpstring("Ith peak position")]
+		double			PeakPosition(
+							[in]		long		index);
+		[id(DISPID_PeakHeight), propget, helpstring("Ith peak height")]
+		double			PeakHeight(
+							[in]		long		index);
+		[id(DISPID_PeakWidth), propget, helpstring("Ith peak width")]
+		double			PeakWidth(
+							[in]		long		index);
+		[id(DISPID_IntegrateSpectra), helpstring("Integrate the spectra between two end points")]
+		VARIANT_BOOL	IntegrateSpectra(
+							[in, out]	SAFEARRAY(double)*	Wavelengths,
+							[in, out]	SAFEARRAY(double)*	Signals);
+		[id(DISPID_SmoothSpectra), helpstring("Smooth the spectra")]
+		VARIANT_BOOL	SmoothSpectra(
+							[in, out]	SAFEARRAY(double)*	Wavelengths,
+							[in, out]	SAFEARRAY(double)*	Signals,
+							[in]		VARIANT_BOOL	fGaussian,
+							[in]		short int		nPoints);
+		[id(DISPID_CalcAverage), helpstring("Calculate the average and standard deviation")]
+		double			CalcAverage(
+							[out]		double	*	stanDev);
+	}
+	[
+		uuid(95A4AD42-7631-436a-9B07-274C3D2D8470),
+		helpstring(" event interface")
+	]
+	dispinterface _SciDataSet
+	{
+	properties:
+	methods:
+		[id(DISPID_requestDispersion)]
+		void			requestDispersion(
+							[in, out] long* gratingID, 
+							[in, out] double* Dispersion);
+		[id(DISPID_requestAnalysisModeIndex)]
+		void			requestAnalysisModeIndex(
+							[in, out]	BSTR*	AnalysisMode,
+							[in, out]	short*	ModeIndex);
+		[id(DISPID_requestAnalysisModeString)]
+		void			requestAnalysisModeString(
+							[in, out]	short*	ModeIndex,
+							[in, out]	BSTR*	AnalysisMode);
+		[id(DISPID_requestOpticalTransfer)]
+		void			requestOpticalTransfer(
+							[in, out]	SAFEARRAY(double)*	ppXValues,
+							[in, out]	SAFEARRAY(double)*	ppYValues);
+		[id(DISPID_RequestOPTArraySize), helpstring("Array size for the OPT data")]
+		void			RequestOPTArraySize(
+							[out]		long*	nValues);
+		[id(DISPID_RequestOPTDataValue), helpstring("Request single OPT value")]
+		void			RequestOPTDataValue(
+							[in]		long	index,
+							[out]		double*	x,
+							[out]		double*	y);
+		[id(DISPID_RequestSetupDisplay), helpstring("Request display component setup")]
+		void			RequestSetupDisplay(
+							[in]		BSTR	component);
+		[id(DISPID_updateOptFile), helpstring("Request that the client updates the OPT information")]
+		void			updateOptFile(
+							[in]		BSTR			opt);
+		[id(DISPID_requestADInfoString), helpstring("Ask for the AD info string")]
+		void requestADInfoString(
+							[in, out]	BSTR* ADInfoString,
+							[in, out]	VARIANT_BOOL* handled);
+		[id(DISPID_requestCalibrationScan), helpstring("Request single calibration scan")]
+		void			requestCalibrationScan(
+							[in]		short		grating,
+							[in]		BSTR		filter,
+							[in]		short		detector);
+		[id(DISPID_requestCalibrationGain), helpstring("Request calibration gain factors")]
+		void			requestCalibrationGain(
+							[in]		double		wavelength,
+							[out]		double	*	GainFactor);
+		[id(DISPID_requestWorkingDirectory), helpstring("Ask for the current working directory")]
+		void			requestWorkingDirectory(
+							[out]		BSTR	*	workingDirectory);
+		[id(DISPID_browseForWorkingDirectory)]
+		void			browseForWorkingDirectory(
+							[in]		long		hwndParent);
+		[id(DISPID_setWorkingDirectory)]
+		void			setWorkingDirectory(
+							[in]		BSTR		workingDirectory);
+	}
+	[
+		uuid(53C6AA39-8826-4572-A514-05105800D22F),
+		helpstring("class")
+	]
+	coclass SciDataSet
+	{
+		[default]				dispinterface			ISciDataSet;
+		[default, source]		dispinterface			_SciDataSet;
+	}
+}

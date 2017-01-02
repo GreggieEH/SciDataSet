@@ -1,0 +1,67 @@
+// MyIDL.idl
+// IDL file for the Simple Com object
+
+#include "dispids.h"
+
+[
+	uuid(97F6EDA9-7BC5-49C8-821D-908247C8C1EA),
+	helpstring(""),
+	version(1.0)
+]
+library InterpolateValue
+{
+	importlib("stdole32.tlb");
+	[
+		uuid(C1A9859A-1480-44BC-885A-667F8F0E0164),
+		helpstring("Interface")
+	]
+	dispinterface IInterpolateValue
+	{
+	properties:
+		[id(DISPID_XArray), bindable, helpstring("X data array")]
+		SAFEARRAY(double)	XArray;
+		[id(DISPID_YArray), bindable, helpstring("Y data array")]
+		SAFEARRAY(double)	YArray;
+		[id(DISPID_arraySize), bindable, helpstring("Array size")]
+		unsigned long		arraySize;
+	methods:
+		[id(DISPID_XValue), propget, bindable, helpstring("x value")]
+		double				XValue(
+								[in]		unsigned long	index);
+		[id(DISPID_XValue), propput, bindable, helpstring("x value")]
+		void				XValue(
+								[in]		unsigned long	index,
+								[in]		double			xvalue);
+		[id(DISPID_YValue), propget, bindable, helpstring("y value")]
+		double				YValue(
+								[in]		unsigned long	index);
+		[id(DISPID_YValue), propput, bindable, helpstring("y value")]
+		void				YValue(
+								[in]		unsigned long	index,
+								[in]		double			yvalue);
+		[id(DISPID_interpolateValue), helpstring("Interpolate value")]
+		double				interpolateValue(
+								[in]		double		xValue);
+	}
+	[
+		uuid(D13EBD58-ADFE-4F31-89B2-FBBEB569B4B5),
+		helpstring(" event interface")
+	]
+	dispinterface _InterpolateValue
+	{
+	properties:
+	methods:
+		[id(DISPID_Error), helpstring("Some kind of error")]
+		void				Error(
+								[in]		BSTR		Error);
+	}
+	[
+		uuid(86201DD6-BAE5-493C-AB74-4CE7F1344BEB),
+		helpstring("class")
+	]
+	coclass InterpolateValue
+	{
+		[default]				dispinterface			IInterpolateValue;
+		[default, source]		dispinterface			_InterpolateValue;
+	}
+}
